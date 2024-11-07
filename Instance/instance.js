@@ -78,14 +78,14 @@ app.post('/sync', express.json(), (req, res) => {
 async function register()  {
 
     try {
-        const response = await fetch(`http://localhost:4000/register`, 
+        const response = await fetch(`http://${hostIp}:4000/register`, 
             { 
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    host: 'localhost',
+                    host: localIp,
                     port: port
                 })
         });

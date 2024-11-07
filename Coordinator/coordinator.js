@@ -182,16 +182,6 @@ const server = app.listen(port, () => {
   logMessage(`Coordinator running at ${port}`);
 });
 
-/*app.get('/worldtime', (req, res) => {
-  fetch('http://worldtimeapi.org/api/timezone/America/Bogota')
-    .then(response => response.json())
-    .then(data => res.json({ datetime: data.datetime }))
-    .catch(error => {
-      console.error('Error:', error);
-      res.status(500).send('Error fetching world time');
-    });
-});*/
-
 app.get('/worldtime', async (req, res) => {
   try {
     const datetime = await getWorldTime();
