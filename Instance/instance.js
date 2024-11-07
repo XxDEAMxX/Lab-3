@@ -22,10 +22,31 @@ function getFormattedTime() {
     return `${hours}:${minutes}:${seconds}`;
 }
 
-function logMessage(message) {
+async function logMessage(message) {
     const timestampedMessage = `[${new Date().toISOString()}] ${message}`;
     console.log(timestampedMessage); 
     logs.push(timestampedMessage); 
+    try {
+        const response = await fetch(`http://${hostIp}:4000/send-logs`, 
+            { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    hostPort: `${localIp}:${port}`,
+                    port: timestampedMessage
+                })
+        });
+        if (response.ok) {
+            const result = await response.text();
+            console.log(result);
+        } else {
+            console.log("Error al registrar la instancia");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
 
 function sendTimeToClients() {

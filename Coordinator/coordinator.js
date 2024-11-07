@@ -8,7 +8,7 @@ dotenv.config( { path: './.env' } );
 
 const app = express();
 const port = process.env.PORT;
-const host = process.env.HOST;
+const host =  process.env.HOST;
 const password = process.env.PASSWORD;
 const username = process.env.USERNAME;
 
@@ -71,6 +71,8 @@ function registerInstance(host, port) {
   logMessage(`Instancia registrada: ${host}:${port}`);
 }
 
+
+
 app.post('/register', (req, res) => {
   const { host, port } = req.body;
   registerInstance(host, port);
@@ -78,13 +80,27 @@ app.post('/register', (req, res) => {
   res.status(200).send('Instancia registrada');
 });
 
+app.post('/send-logs', (req, res) => {
+  const { hostPort, ms } = req.body;
+  console.log('sadasdsadsa' + hostPort);
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({  hostPort, ms }));
+    }
+  });
+});
+
 app.post('/launch', (req, res) => {
+  console.log(host);
+  console.log(password);
+  console.log(password);
   const connection = new Client();
   connection.on('ready', () => {
     logMessage("Cliente SSH conectado");
-
+    
     const randomPort = getRandomPort(5000, 6000, usedPorts);
-    const dockerCommand = `docker run -d -p ${randomPort}:3000 instance`;
+    console.log(randomPort);
+    const dockerCommand = `sudo docker run -d -p ${randomPort}:${randomPort} --name ${randomPort} -e PORT=${randomPort} -e HOST_IP=${host} -e LOCAL_IP=${host} imagen`;
 
     logMessage(`Ejecutando comando Docker: ${dockerCommand}`);
 
@@ -112,7 +128,7 @@ app.post('/launch', (req, res) => {
   }).connect({
     host: host,
     port: 22,
-    username: username,
+    username: password,
     password: password,
   });
 });

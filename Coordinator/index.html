@@ -29,14 +29,69 @@
             const data = JSON.parse(event.data);
 
             if (Array.isArray(data)) {
-                console.log('xd');
+                console.log('array');
                 ipList.innerHTML = '';
                 data.forEach(host => {
                     addIpToList(host.host + ':' + host.port);
                 });
             } else if (data.host) {
-                console.log('xd2');
-                addIpToList(data.host + ':' + data.port);
+                // console.log('xd2');
+                // addIpToList(data.host + ':' + data.port);
+                console.log('new');
+                const table = document.createElement(`${data.host}:${data.port}`);
+                table.border = '1';
+                
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                
+                const headers = ['Host', 'Puerto', 'Tiempo'];
+                headers.forEach(headerText => {
+                    const th = document.createElement('th');
+                    th.textContent = headerText;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+                
+                // Crear el cuerpo de la tabla con los datos recibidos
+                const tbody = document.createElement('tbody');
+                const row = document.createElement('tr');
+                
+                const hostCell = document.createElement('td');
+                hostCell.textContent = data.host;
+                row.appendChild(hostCell);
+                
+                const portCell = document.createElement('td');
+                portCell.textContent = data.port;
+                row.appendChild(portCell);
+                
+                const timeCell = document.createElement('td');
+                timeCell.textContent = data.time;
+                row.appendChild(timeCell);
+                
+                tbody.appendChild(row);
+                table.appendChild(tbody);
+                
+                // Agregar la tabla completa al contenedor en el HTML
+                document.getElementById('tables-container').appendChild(table);
+            } else if (data.hostPort) {
+                console.log('log');
+                const row = document.createElement(data.hostPort);
+                
+                const hostCell = document.createElement('td');
+                hostCell.textContent = data.host;
+                row.appendChild(hostCell);
+
+                const portCell = document.createElement('td');
+                portCell.textContent = data.port;
+                row.appendChild(portCell);
+
+                const timeCell = document.createElement('td');
+                timeCell.textContent = data.time;
+                row.appendChild(timeCell);
+
+                // Agregar la fila al cuerpo de la tabla
+                document.getElementById('data-table').appendChild(row);
             }
         };
 

@@ -11,6 +11,7 @@
     
     <script>
         const ws = new WebSocket('ws://localhost:3000');
+        app.use(express.json());
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -24,6 +25,13 @@
         ws.onclose = () => {
             console.log('Desconectado del servidor WebSocket');
         };
+
+        app.post('/send-logs', (req, res) => {
+            const { host, port } = req.body;
+            registerInstance(host, port);
+            console.log(instances);
+            res.status(200).send('Instancia registrada');
+        });
     </script>
 </body>
 </html>
