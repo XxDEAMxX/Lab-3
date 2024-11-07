@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Logs</title>
+</head>
+<body>
+    <h1>Logs en tiempo real</h1>
+    <div id="logs"></div>
+    <button onclick="launchInstance()">Lanzar nueva instancia</button>
+    <button onclick="synchronizeClocks()">Ejecutar Algoritmo de Berkeley</button>
+    <h1>Lista de IPs recibidas</h1>
+    <ul id="ip-list"></ul>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:4000');
+        const ipList = document.getElementById('ip-list');
+
+        ws.onmessage = (event) => {
+            const log = JSON.parse(event.data).time;
+            console.log('event.data');
+            console.log(event.data);
+            const logElement = document.createElement('p');
+            logElement.textContent = log;
+            document.getElementById('logs').appendChild(logElement);
+
+
+            const data = JSON.parse(event.data);
+
+            if (Array.isArray(data)) {
+                console.log('xd');
+                ipList.innerHTML = '';
+                data.forEach(host => {
+                    addIpToList(host.host + ':' + host.port);
+                });
+            } else if (data.host) {
+                console.log('xd2');
+                addIpToList(data.host + ':' + data.port);
+            }
+        };
+
+        function addIpToList(ip) {
+            const listItem = document.createElement('li');
+            listItem.textContent = ip;
+            ipList.appendChild(listItem);
+        }
+
+        async function launchInstance() {
+            try {
+                const response = await fetch('http://localhost:4000/launch', { method: 'POST' });
+                if (response.ok) {
+                    const result = await response.text();
+                    alert(result);
+                } else {
+                    alert("Error al lanzar la instancia");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        async function synchronizeClocks() {
+            try {
+                const response = await fetch('http://localhost:4000/sync-clocks', { method: 'POST' });
+                if (response.ok) {
+                    const result = await response.text();
+                    alert(result);
+                } else {
+                    alert("Error al lanzar la instancia");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+    </script>
+</body>
+</html>
