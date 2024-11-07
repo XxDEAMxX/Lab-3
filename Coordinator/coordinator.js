@@ -82,12 +82,12 @@ app.post('/register', (req, res) => {
 
 app.post('/send-logs', (req, res) => {
   const { hostPort, ms } = req.body;
-  console.log('sadasdsadsa' + hostPort);
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({  hostPort, ms }));
-    }
-  });
+  // console.log('sadasdsadsa' + hostPort);
+  // wss.clients.forEach((client) => {
+  //   if (client.readyState === WebSocket.OPEN) {
+  //       client.send(JSON.stringify({  hostPort, ms }));
+  //   }
+  // });
 });
 
 app.post('/launch', (req, res) => {
