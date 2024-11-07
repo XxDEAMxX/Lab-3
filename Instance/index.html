@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hora en Tiempo Real</title>
+</head>
+<body>
+    <h1>Hora en Tiempo Real</h1>
+    <div id="timeDisplay">Esperando la hora...</div>
+    
+    <script>
+        const ws = new WebSocket('ws://localhost:3000');
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            document.getElementById('timeDisplay').textContent = `Hora: ${data.time}`;
+        };
+
+        ws.onopen = () => {
+            console.log('Conectado al servidor WebSocket');
+        };
+
+        ws.onclose = () => {
+            console.log('Desconectado del servidor WebSocket');
+        };
+    </script>
+</body>
+</html>

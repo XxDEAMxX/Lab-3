@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "http": "^0.0.1-security",
+    "ssh2": "^1.16.0",
+    "ws": "^8.18.0"
+  }
+}
